@@ -1,0 +1,78 @@
+﻿
+@model IList<EmployeeInformationSystem.Models.Salary>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Employee Name</th>
+                <th>Basic Salary</th>
+                <th>House Rent</th>
+                <th>Is Active</th>
+                <th> Edit</th>
+                <th> Delete</th>
+
+            </tr>
+
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Employee.EmployeeName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BasicSalary)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HouseRent)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IsActive)
+                </td>
+                <td>
+                    <a href="@Url.Action("Edit","Salary",new { id=item.SalaryID })" class="editDialog">
+                        <i class="fade fa-pencil-square-o"></i>Edit
+                    </a>
+                </td>
+                <td>
+                    <a href="@Url.Action("Delete","Salary",new { id=item.SalaryID })" class="editDialog">
+                        <i class="fade fa-pencil-square-o"></i>Delete
+                    </a>
+                </td>
+                @*<td>
+
+            @Ajax.ActionLink("Delete", "Delete", "Salary", new { @id = item.SalaryID }, new AjaxOptions { HttpMethod = "Get", UpdateTargetId = "div-record" }, new { @class = "fa fa-trash-o" })
+        </td>*@
+            </tr>
+            }
+        </tbody>
+
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#Add").click(function (event) {
+            event.preventDefault();
+            $.get(this.href, function (response) {
+                $(".divforAdd").html(response);
+            });
+
+            $("#Add-Modal").modal({
+                backdrop: "static",
+            }, 'show');
+        });
+        $(".editDialog").click(function (event) {
+            event.preventDefault();
+            $.get(this.href, function (response) {
+                $(".divforUpdate").html(response);
+            });
+
+            $("#Edit-Modal").modal({
+                backdrop: "static",
+            }, 'show');
+        })
+    })
+</script>
+

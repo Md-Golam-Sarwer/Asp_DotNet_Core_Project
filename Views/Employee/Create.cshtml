@@ -1,0 +1,169 @@
+﻿@model EmployeeInformationSystem.Models.Employee
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="col-11 mx-auto pt-0 p-0">
+    <div class="card">
+        <div class="card-header bg-primary text-uppercase text-white" style="height:45px;">
+            <h4>Create Employee</h4>
+        </div>
+        <form enctype="multipart/form-data" asp-action="Create">
+            <div class="row">
+                <div class="col-md-6">
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="EmployeeName" class="control-label"></label>
+                        <input asp-for="EmployeeName" class="form-control" />
+                        <span asp-validation-for="EmployeeName" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Branch.BranchName" class="control-label"></label>
+                        <select asp-for="BranchID" class="form-control" asp-items="ViewBag.BranchName"></select>
+                        <span asp-validation-for="BranchID" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Department.DepartmentName" class="control-label"></label>
+                        <select asp-for="DepartmentID" class="form-control" asp-items="ViewBag.DepartmentName"></select>
+                        <span asp-validation-for="DepartmentID" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Email" class="control-label"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="ConfirmEmail" class="control-label"></label>
+                        <input asp-for="ConfirmEmail" class="form-control" />
+                        <span asp-validation-for="ConfirmEmail" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="CellPhone" class="control-label"></label>
+                        <input asp-for="CellPhone" class="form-control" />
+                        <span asp-validation-for="CellPhone" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="LastUpdate" class="control-label"></label>
+                        <input asp-for="LastUpdate" class="form-control" />
+                        <span asp-validation-for="LastUpdate" class="text-danger"></span>
+                    </div>
+                </div>
+
+
+                <div class="col-md-6 btn-group">
+                    <div class="form-group col-8 p-0">
+                        <label asp-for="ProfilePhoto" class="control-label"></label>
+                        <div>
+                            <input type="file" name="ProfilePhoto" class="custom-file-input" id="customFile"
+                                   onchange="document.getElementById('PreviewPhoto').src = window.URL.createObjectURL(this.files[0]) " />
+
+                            <label class="custom-file-label" for="customFile">Choose Your Photo</label>
+                        </div>
+                        <span asp-validation-for="PhotoUrl" class="text-danger"></span>
+                    </div>
+                    <div class="form-group col-4">
+                        <img id="PreviewPhoto" src="~/Images/noimage.png" alt=" No Image"
+                             width="125" height="125" style="border:1px; margin-top:20px;" />
+
+                    </div>
+                </div>
+            </div>        
+
+            <input type="hidden" id="hdnLastIndex" value="0" />
+
+            <div class="col-12 btn-group">
+                <div class="col-6 form-group text-right p-2">
+                    <a asp-action="Index" class="btn btn-secondary">&nbsp;Back&nbsp;</a>
+                </div>
+                <div class="col-6 form-group text-left p-2">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+
+
+
+        function DeleteItem(btn) {
+            $(btn).closest('tr').remove();
+        }
+
+
+
+        function AddItem(btn) {
+
+            var table = document.getElementById('ExpTable');
+            var rows = table.getElementsByTagName('tr');
+
+            var rowOuterHtml = rows[rows.length - 1].outerHTML;
+
+            var lastrowIdx = document.getElementById('hdnLastIndex').value;
+
+            var nextrowIdx = eval(lastrowIdx) + 1;
+
+            document.getElementById('hdnLastIndex').value = nextrowIdx;
+
+            rowOuterHtml = rowOuterHtml.replaceAll('_' + lastrowIdx + '_', '_' + nextrowIdx + '_');
+            rowOuterHtml = rowOuterHtml.replaceAll('[' + lastrowIdx + ']', '[' + nextrowIdx + ']');
+            rowOuterHtml = rowOuterHtml.replaceAll('-' + lastrowIdx, '-' + nextrowIdx);
+
+
+            var newRow = table.insertRow();
+            newRow.innerHTML = rowOuterHtml;
+
+
+
+            var btnAddID = btn.id;
+            var btnDeleteid = btnAddID.replaceAll('btnadd', 'btnremove');
+
+            var delbtn = document.getElementById(btnDeleteid);
+            delbtn.classList.add("visible");
+            delbtn.classList.remove("invisible");
+
+
+            var addbtn = document.getElementById(btnAddID);
+            addbtn.classList.remove("visible");
+            addbtn.classList.add("invisible");
+
+        }
+
+    </script>
+}
+
+
+
+
+
